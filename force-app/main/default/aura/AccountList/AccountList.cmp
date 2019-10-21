@@ -1,6 +1,11 @@
 <aura:component controller="AccountsController">
   <aura:attribute name="accounts" type="List" />
   <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <!-- This is not checked in -->
+    
+    
+    <!-- this line is added in vscode -->
+    <!-- this is a test -->
   <!--
     Use a data table from the Lightning Design System:
     https://www.lightningdesignsystem.com/components/data-tables/
