@@ -1,0 +1,12 @@
+<aura:component controller="MyContactListController">
+        <aura:handler name="init" action="{!c.myAction}" value="{!this}" />
+        <aura:attribute name="GTPPhotos" type="GTPPhoto__x[]" />
+    
+
+    <ul>
+<aura:iteration items="{!v.GTPPhotos}" var="GTPPhoto">
+<li class="minli"> <h3>{!GTPPhoto.response__c}</h3> </li>
+</aura:iteration>
+</ul> 
+    
+</aura:component>

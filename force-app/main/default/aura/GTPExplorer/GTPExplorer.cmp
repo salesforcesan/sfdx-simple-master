@@ -1,0 +1,7 @@
+<aura:component >
+
+    <div>
+        <c:GTPList />
+    </div>
+    
+</aura:component>

@@ -1,0 +1,20 @@
+<aura:component controller="AutocompleteController">
+    <aura:attribute name="sObjectType" required="true" type="String" description="Name of the sObject that will be filtered" />
+    <aura:attribute name="fields" type="String[]" default="" description="List of fields to get with each record"/>
+    <aura:attribute name="limit" type="Integer" default="10" description="Limits the number of sObjects returned to this value" />
+    <aura:attribute name="inputLabel" type="String" default="Find" description="Label for text input"/>
+    
+    <aura:attribute name="ready" type="Boolean" default="false" description="Used to check if resources have been loaded"/>
+
+    <aura:registerEvent name="autocompleteEvent" type="c:autocompleteEvt"/>
+        <!-- see https://login.salesforce.com/packaging/installPackage.apexp?p0=04tB000000011BX -->
+
+    <ltng:require scripts="{!$Resource.jquery_ui + '/external/jquery/jquery.js'}" />
+    <ltng:require scripts="{!$Resource.jquery_ui + '/jquery-ui.js'}" />
+    <ltng:require styles="{!$Resource.jquery_ui +'jquery-ui.css'}" />
+
+    <div>
+        <label>{!v.inputLabel}: </label>
+        <input class="autocomplete" type="text" />
+    </div>
+</aura:component>

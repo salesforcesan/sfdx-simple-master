@@ -1,0 +1,82 @@
+<aura:component controller="StoreVisitController" implements="force:appHostable">    
+    <ltng:require styles="{!$Resource.slds +'/assets/styles/salesforce-lightning-design-system-ltng.css'}"/>
+    <aura:attribute name="storeVisits" type="List" />
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <!--handler for removing component-->
+    <aura:handler name="RemoveComponent" action="{!c.removeComponent}" event="c:RemoveComponent"/>
+    
+    <div class="wk_static">
+        
+        <!--set component in the varible {!v.body}-->
+        <div aura:id="cmpBody">
+            {!v.body}
+        </div>
+        
+    </div>   
+    
+    <!--
+    Use a data table from the Lightning Design System:
+    https://www.lightningdesignsystem.com/components/data-tables/
+  -->   
+    
+    <lightning:card >
+        <aura:set attribute="title">
+            Retail Rep Assignment App
+        </aura:set>
+        <aura:set attribute="actions">
+            <!--<lightning:button label="Refresh" iconName="utility:refresh" variant="brand" onclick="{!c.refreshComponent}" />-->
+        </aura:set> 
+        <aura:set attribute="footer">
+            
+        </aura:set>      
+        <p class="slds-p-horizontal_small">                        
+            <table class="slds-table slds-table--bordered slds-table--striped slds-table--cell-buffer slds-table--fixed-layout">
+                <thead>
+                    <tr class="slds-text-heading_small">              
+                        <th scope="col" colspan="2">Store Visit</th>
+                        <th scope="col">Start Date</th>
+                        <th scope="col">End Date</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Retail Rep</th>
+                        <th scope="col" colspan="2"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Use the Apex model and controller to fetch server side data -->
+                    <aura:iteration items="{!v.storeVisits}" var="storeVisit" indexVar="indx">
+                        <tr>
+                            
+                            <td class="slds-cell-wrap" colspan="2"><b><u>{!storeVisit.Store__r.Name}</u></b><br/>{!storeVisit.Store__r.Address__c}</td>
+                            <td class="slds-cell-wrap">{!storeVisit.StartDate__c}</td>
+                            <td class="slds-cell-wrap">{!storeVisit.EndDate__c}</td>
+                            <td class="slds-cell-wrap">{!storeVisit.Status__c}</td>
+                            <td class="slds-cell-wrap">{!storeVisit.RetailRep__r.FirstName__c}&nbsp;{!storeVisit.RetailRep__r.LastName__c}</td>
+                            <td class="slds-cell-wrap slds-text-align_right" colspan="2">
+                                <form class="account-form" onsubmit="{!c.deleteAccount}">
+                                    <input type="hidden" value="{!storeVisit.Id}" class="account-name" />
+                                    <!--
+                                    Use a Lightning Base Component
+                                    To display an icon next to the label
+                                   -->                 
+                                    <!-- <button type="button" onclick="{!c.getCompnent}" id="{!storeVisit.Id}">Delete</button>-->
+                                    
+                                    <lightning:button label="Assign Retail Rep"
+                                                      iconName="utility:add"
+                                                      iconPosition="left"
+                                                      variant="success"                                
+                                                      value="{!indx}"
+                                                      onclick="{!c.getCompnent}" 
+                                                      />
+                                    
+                                </form>
+                            </td>
+                        </tr>
+                    </aura:iteration>
+                </tbody>
+            </table>       
+            
+        </p>
+    </lightning:card>
+    
+</aura:component>

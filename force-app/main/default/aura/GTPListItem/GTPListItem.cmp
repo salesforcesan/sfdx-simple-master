@@ -1,0 +1,14 @@
+<aura:component >
+	
+    <aura:attribute name="house" type="house"/>
+    
+	<a href="{! '/' + v.house.Id}">
+    <div style="{! 'background-image:url(' + v.house.DisplayUrl + ')'}">
+        <div>
+            <h1>{!v.house.Title__c}</h1>            
+            <div>Job: {!v.house.job__c}&nbsp;&nbsp;&nbsp;Job Attempt: {!v.house.jobattempt__c}</div>
+            <div>Modified Date: {!v.house.date_modified__c }</div>
+        </div>
+    </div>
+	</a>        
+</aura:component>

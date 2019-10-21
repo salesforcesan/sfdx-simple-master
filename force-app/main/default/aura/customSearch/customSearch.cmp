@@ -1,0 +1,114 @@
+<aura:component implements="forceCommunity:searchInterface" controller="CustomSearchController">
+    <aura:attribute name="searchText" type="String" default=""/>
+    <aura:attribute name="selectedRow" type="RetailRep__c"/>
+    <aura:attribute name="selectedRowIndx" type="Double" default="null" />  
+    <aura:attribute name="message" type="String"/> 
+    <aura:attribute name="confirmation" type="Boolean" default="false"/> 
+    <aura:attribute name="repSelected" type="Boolean" default="false"/> 
+    <aura:attribute name="searchHit" type="Boolean" default="false"/> 
+    
+    <ltng:require styles="{!$Resource.slds +'/assets/styles/salesforce-lightning-design-system-ltng.css'}"/>
+    
+    <!--Initialize the component-->
+    <aura:handler name="init" value="{!this}" action="{!c.applycss}"/>
+    
+    <aura:attribute name="childAttr" type="StoreVisit__c" /> 
+    
+    <!--Register Event-->
+    <aura:registerEvent name="RemoveComponent" type="c:RemoveComponent"/>    
+    <aura:attribute type="list" name="recordIds" />   
+    
+    
+    <div class="wk_static">  
+        <!--Create a modalbox using Salesforce Lightning Desing System-->
+        <div role="dialog" tabindex="-1" aura:id="Modalbox" aria-labelledby="header43" class="slds-modal ">
+            <div class="slds-modal__container">
+                <div class="slds-modal__header">
+                    <button class="slds-button slds-button--icon-inverse slds-modal__close" onclick="{!c.removeComponent}">
+                        <span>
+                            <span class="slds-assistive-text">Close</span>
+                        </span>                 
+                    </button>
+                    <h2 id="header43" class="slds-text-heading--medium">Assign Retail Rep</h2>
+                </div>
+                
+                <aura:renderIf isTrue="{!v.confirmation}">
+                    <div class="slds-modal__content slds-p-around--medium">
+                        <div>
+                            Retail Rep {!v.selectedRow.FirstName__c}&nbsp;{!v.selectedRow.LastName__c} has been assigned to a store located at <u>{!v.childAttr.Store__r.Address__c} &nbsp;({!v.childAttr.Store__r.Name})</u>.
+                        </div>
+                    </div>
+                    <div class="slds-modal__footer">
+                        <button class="slds-button slds-button--neutral" onclick="{!c.removeComponent}">Close</button>
+                        
+                    </div>
+                    <aura:set attribute="else">
+                        <div class="slds-modal__content slds-p-around--small">
+                            <div>
+                                <div class="slds-grid">
+                                <div class="slds-size--1-of-1 slds-small-size--10-of-12 ">
+                                    <div class="slds-form-element">
+                                        <div class="slds-form-element__control">
+                                            <ui:inputText value="{!v.searchText}" class="slds-input" />
+                                        </div>
+                                    </div>
+                                </div>                                
+                                <div class="slds-size--1-of-1 slds-small-size--2-of-12">
+                                    <div class="slds-form-element ">
+                                        <div class="slds-form-element__control slds-float--right">
+                                            <lightning:button iconName="utility:search" label="Search" variant="brand" onclick="{! c.handleClick }" />                                
+                                        </div>
+                                    </div>
+                                </div>
+                                </div>
+                                
+                                <aura:if isTrue="{!(v.searchHit)}">
+                                    <br /><br />
+                                    <h1>
+                                        <b>
+                                            Search Results
+                                        </b>
+                                    </h1>
+                                <aura:if isTrue="{!(v.recordIds.length == 0) }">
+                                    No Records Found
+                                </aura:if>
+                                <aura:if isTrue="{!(v.recordIds.length > 0) }">
+                                    <table class="slds-table slds-table--bordered slds-table--striped slds-table--cell-buffer slds-table--fixed-layout">
+                                        <thead>
+                                            <tr class="slds-text-heading--label">
+                                                <th scope="col"><div class="slds-truncate" title="ID">ID</div></th>
+                                                <th scope="col"><div class="slds-truncate" title="Name">First Name</div></th>
+                                                <th scope="col"><div class="slds-truncate" title="Type">Last Name</div></th>      
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <!-- Use the Apex model and controller to fetch server side data -->
+                                            <aura:iteration items="{!v.recordIds}" var="retailRep" indexVar="indx">
+                                                <tr onclick="{!c.selectSObjectRecord}" data-record='{!indx}'
+                                                    class="{! equals(concat('',indx),v.selectedRowIndx)  ? 'slds-is-selected' : ''}">
+                                                    <th scope="row"><div class="slds-truncate" title="{!retailRep.Name}">{!retailRep.Name}</div></th>
+                                                    <td><div class="slds-truncate" title="{!retailRep.FirstName__c}">{!retailRep.FirstName__c}</div></td>
+                                                    <td><input type="hidden" value="{!retailRep.Id}" class="account-name" /><div class="slds-truncate" title="{!retailRep.LastName__c}">{!retailRep.LastName__c}</div></td>           
+                                                </tr>
+                                            </aura:iteration>
+                                        </tbody>
+                                    </table>
+                                </aura:if>
+                                </aura:if>
+                                </div>
+                            
+                        </div>
+                        <div class="slds-modal__footer">
+                            <button class="slds-button slds-button--neutral" onclick="{!c.removeComponent}">Cancel</button>
+                            <button class="slds-button slds-button--neutral" disabled="{! (!v.repSelected)}" onclick="{!c.assignRetailRep}">Assign</button>
+                        </div>
+                    </aura:set>
+                    
+                </aura:renderIf>
+                
+            </div>
+        </div>
+        <div class="slds-backdrop " aura:id="MB-Back"></div>         
+    </div>
+    
+</aura:component>

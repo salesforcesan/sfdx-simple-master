@@ -1,0 +1,7 @@
+<aura:component implements="force:appHostable">
+
+    <div>
+        <div> <c:PhotoMap /></div>        
+    </div>
+
+</aura:component>
